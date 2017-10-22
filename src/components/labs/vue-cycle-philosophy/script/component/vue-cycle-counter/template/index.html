@@ -1,0 +1,10 @@
+<div class="counter-wrapper">
+  <h3>Vuecycle Counter</h3>
+  <div>Counter Count: {{ counts }}</div>
+  <div>
+    <button v-on:click="clickIncrement">(+)</button>
+    <button v-on:click="clickDecrement">(-)</button>
+    by
+    <input type="number" v-model="multiplier" /> times.
+  </div>
+</div>

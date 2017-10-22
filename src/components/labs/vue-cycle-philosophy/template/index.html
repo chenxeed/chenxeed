@@ -1,0 +1,51 @@
+<div>
+  <h2>VueJS with CycleJS Philosophy</h2>
+  <p>
+    How is that possible?
+  </p>
+  <div>
+    <h3>This is VueJS Counter Component</h3>
+    <p>
+      Restart Counter To:
+      <input type="number" v-model.number="counterStart" />
+      <br />
+      Can the app listen to the VueJS Counter changes?
+      {{ vueCounterMessage }}
+    </p>
+    <vue-counter
+      :count-start="counterStart"
+      @update:count="vueCounterChange"
+      @update:act="vueCounterActionChange"
+    />
+  </div>
+  <div>
+    <h3>This is CycleJS Counter Component</h3>
+    <p>
+      It's wrapped by vue component btw, but just to generate the container.<br/>
+      How about CycleJS App Counter, can I still listen to it?
+      {{ cycleCounterMessage }}
+    </p>
+    <cycle-counter
+      :count-start="counterStart"
+      @update:count="cycleCounterChange"
+      @update:act="cycleCounterActionChange"
+    />
+  </div>
+  <div>
+    <h3>And lastly, this is the VueJS Counter Component (with Cycle Philosophy)</h3>
+    <p>
+      It is written in vueJS component, but the way to run the data flow is inspired by CycleJS philosophy, which is to:
+      <br />
+      <ul>
+        <li>use streams for the app logic</li>
+        <li>pure functions without any instance</li>
+        <li>and manage the side effect at the end of each flow</li>
+      </ul>
+    </p>
+    <vue-cycle-counter
+      :count-start="counterStart"
+      @update:count="vueCounterChange"
+      @update:act="vueCounterActionChange"
+    />
+  </div>
+</div>
