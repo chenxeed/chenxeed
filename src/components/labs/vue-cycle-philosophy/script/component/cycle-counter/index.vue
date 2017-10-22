@@ -5,7 +5,7 @@
 </template>
 <style scoped>
   .counter-wrapper {
-    width: 300px;
+    width: 250px;
     height: 200px;
     padding: 15px;
     border: 1px double grey;
@@ -15,7 +15,7 @@
 </style>
 
 <script>
-import { Observable, Subject } from 'rxjs'
+import { Observable, BehaviorSubject } from 'rxjs'
 import { App, makeDriver } from './cycleCounterApp'
 import { setAdapt } from '@cycle/run/lib/adapt'
 import { run } from '@cycle/run'
@@ -29,7 +29,7 @@ export default {
     return {
       cycleDispose: () => {},
       propsStream: {
-        countStart: new Subject()
+        countStart: new BehaviorSubject(this.countStart)
       }
     }
   },
@@ -40,8 +40,8 @@ export default {
   },
   // Event Watcher
   watch: {
-    countStart () {
-      this.triggerCountStart$(this.countStart)
+    countStart (value) {
+      this.triggerCountStart$(value)
     }
   },
   // Initialization
@@ -55,8 +55,6 @@ export default {
       $emit: this.$emit.bind(this),
       propsStream: this.propsStream
     }))
-    // Trigger the initial value by the props
-    this.triggerCountStart$(this.countStart)
   },
   beforeDestroy () {
     // Dispose the CycleJS app to remove all the listeners
@@ -64,5 +62,4 @@ export default {
     this.cycleDispose()
   }
 }
-
 </script>

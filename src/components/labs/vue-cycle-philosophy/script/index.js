@@ -15,7 +15,9 @@ export default {
       vueCounterCount: 0,
       vueCounterAction: {action: 'start', multiplier: 0},
       cycleCounterCount: 0,
-      cycleCounterAction: {action: 'start', num: 0}
+      cycleCounterAction: {action: 'start', num: 0},
+      vueCycleCounterCount: 0,
+      vueCycleCounterAction: {action: 'start', num: 0}
     }
   },
   computed: {
@@ -38,7 +40,19 @@ export default {
         if (action === 'increment' || action === 'decrement') {
           return `Also can! Now it's ${action} by ${multiplier} to ${count}.`
         } else if (action === 'start') {
-          return `Currently it start at ${count}.`
+          return `Now it's at ${count}. Click the button yo!`
+        }
+      })(act)
+      return `${actMessage}`
+    },
+    vueCycleCounterMessage () {
+      const count = this.vueCycleCounterCount
+      const act = this.vueCycleCounterAction
+      const actMessage = (({action, multiplier}) => {
+        if (action === 'increment' || action === 'decrement') {
+          return `Yes! Now it's ${action} by ${multiplier} to ${count}.`
+        } else if (action === 'start') {
+          return `This is the first value ${count}, and then...`
         }
       })(act)
       return `${actMessage}`
@@ -57,6 +71,12 @@ export default {
     },
     cycleCounterActionChange (action) {
       this.cycleCounterAction = action
+    },
+    vueCycleCounterChange (count) {
+      this.vueCycleCounterCount = count
+    },
+    vueCycleCounterActionChange (action) {
+      this.vueCycleCounterAction = action
     }
   }
 }

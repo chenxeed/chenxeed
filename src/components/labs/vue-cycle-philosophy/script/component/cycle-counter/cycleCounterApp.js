@@ -38,10 +38,10 @@ export function App (source) {
   const reducerAction$ = Observable.merge(
     increment$.mapTo('increment'),
     decrement$.mapTo('decrement')
-    ).map(action => state => ({
-      ...state,
-      action
-    }))
+  ).map(action => state => ({
+    ...state,
+    action
+  }))
   const reducer$ = Observable.merge(
     reducerCount$,
     reducerIncCount$,
