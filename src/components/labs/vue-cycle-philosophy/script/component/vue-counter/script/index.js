@@ -13,7 +13,7 @@ export default {
       action: 'start'
     }
   },
-  // View Model, map the data value for view purpose
+  // Use computed as the view model to transform the data value for view purpose
   // Hint: Do not use computed name that's same with data,
   // since the view will get the value from data instead.
   computed: {

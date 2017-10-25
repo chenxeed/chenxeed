@@ -1,4 +1,6 @@
 export function makeVueEmitDriver ($emit) {
+  // vueEmitDriver job is to run the side effect of running "$emit" to trigger
+  // the emit event based on the key and stream passed from the sink.
   return function vueEmitDriver (sink$) {
     sink$.addListener({
       next: emitEvents => {
@@ -20,6 +22,16 @@ export function makeVueEmitDriver ($emit) {
 }
 
 export function makeVuePropsDriver (propsStream) {
+  // Use vue props driver to connect the stream from propsStream to app intent.
+  // The propsStream must give specific key as it will be used on function select()
+  // Ex:
+  // 
+  // propsStream = {
+  //   myname : new Subject
+  // }
+  // 
+  // const myname$ = vueProps.select('myname')
+  // 
   return function vuePropsDriver () {
     return {
       select: function (prop) {
@@ -30,6 +42,8 @@ export function makeVuePropsDriver (propsStream) {
 }
 
 export function makeVueDataDriver (vueData) {
+  // vueDataDriver job is to run the side effect of manipulating vue data object,
+  // based on the object passed from the sink.
   return function vueDataDriver (sink$) {
     sink$.addListener({
       next: state => {
