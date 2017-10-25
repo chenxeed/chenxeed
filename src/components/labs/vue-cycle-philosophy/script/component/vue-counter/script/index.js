@@ -72,6 +72,8 @@ export default {
   watch: {
     countStart () {
       this.updateCount(this.countStart)
+      this.updateAction('start')
+      this.emitAction()
     },
     count () {
       this.emitCount()

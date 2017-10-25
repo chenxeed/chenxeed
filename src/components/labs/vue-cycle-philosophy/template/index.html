@@ -10,55 +10,55 @@
     <input type="number" v-model.number="counterStart" />
   </p>
   <div>
-    <h3>This is VueJS Counter Component</h3>
+    
     <div class="mdl-grid">
-      <p class="mdl-cell mdl-cell--6-col">
-        Can the app listen to the VueJS Counter changes?
-        {{ vueCounterMessage }}
-      </p>
-      <vue-counter class="mdl-cell mdl-cell--6-col"
-        :count-start="counterStart"
-        @update:count="vueCounterChange"
-        @update:act="vueCounterActionChange"
-      />
-    </div>
-  </div>
-  <div>
-    <h3>This is CycleJS Counter Component</h3>
-    <div class="mdl-grid">
-      <p class="mdl-cell mdl-cell--6-col">
-        It's wrapped by vue component btw, but just to generate the container.<br/>
-        How about CycleJS App Counter, can I still listen to it?
-        {{ cycleCounterMessage }}
-      </p>
-      <cycle-counter class="mdl-cell mdl-cell--6-col"
-        :count-start="counterStart"
-        @update:count="cycleCounterChange"
-        @update:act="cycleCounterActionChange"
-      />
-    </div>
-  </div>
-  <div>
-    <h3>And lastly, this is the VueJS Counter Component (with Cycle Philosophy)</h3>
-    <div class="mdl-grid">
-      <p class="mdl-cell mdl-cell--6-col">
-        It is written in vueJS component, but the way to run the data flow is inspired by CycleJS philosophy, which is to:
-        <br />
-        <ul>
-          <li>use streams for the app logic</li>
-          <li>pure functions without any instance</li>
-          <li>(absolutely) one way data flow</li>
-          <li>Model-View-Intent application flow</li>
-          <li>manage the side effect at the end of each flow</li>
-        </ul>
-        <br />
-        Last to test, can the app listen to it? {{vueCycleCounterMessage}}
-      </p>
-      <vue-cycle-counter class="mdl-cell mdl-cell--6-col"
-        :count-start="counterStart"
-        @update:count="vueCycleCounterChange"
-        @update:act="vueCycleCounterActionChange"
-      />
+      <div class="mdl-cell mdl-cell--4-col">
+        <h3>VueJS Counter Component</h3>
+        <vue-counter
+          :count-start="counterStart"
+          @update:count="vueCounterChange"
+          @update:act="vueCounterActionChange"
+        />
+        <p>
+          Can the app listen to the VueJS Counter changes?
+          <b>{{ vueCounterMessage }}</b>
+        </p>
+      </div>
+      <div class="mdl-cell mdl-cell--4-col">
+        <h3>Cycle Counter Component</h3>
+        <cycle-counter
+          :count-start="counterStart"
+          @update:count="cycleCounterChange"
+          @update:act="cycleCounterActionChange"
+        />
+        <p>
+          How about CycleJS App Counter, can I still listen to it?
+          <b>{{ cycleCounterMessage }}</b>
+          <br/>
+          It's wrapped by vue component btw, but just to generate the container.
+        </p>
+      </div>
+      <div class="mdl-cell mdl-cell--4-col">
+        <h3>Cycle Counter Component</h3>
+        <vue-cycle-counter class="mdl-cell mdl-cell--6-col"
+          :count-start="counterStart"
+          @update:count="vueCycleCounterChange"
+          @update:act="vueCycleCounterActionChange"
+        />
+        <p>
+          <b>Last to test, can the app listen to it? {{vueCycleCounterMessage}}</b>
+          <br />
+          It is written in vueJS component, but the way to run the data flow is inspired by CycleJS philosophy, which is to:
+          <br />
+          <ul>
+            <li>use streams for the app logic</li>
+            <li>pure functions without any instance</li>
+            <li>(absolutely) one way data flow</li>
+            <li>Model-View-Intent application flow</li>
+            <li>manage the side effect at the end of each flow</li>
+          </ul>
+        </p>
+      </div>
     </div>
   </div>
 </div>

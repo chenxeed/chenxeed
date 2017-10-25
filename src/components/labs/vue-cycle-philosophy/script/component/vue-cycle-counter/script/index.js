@@ -1,10 +1,6 @@
 import { Observable, Subject, BehaviorSubject } from 'rxjs'
-
-const initialState = {
-  count: 0,
-  multiplier: 5,
-  action: 'start'
-}
+import { intent } from './app/intent'
+import { model, initialState } from './app/model'
 
 function sources ({countStart}) {
   const props = {
@@ -22,55 +18,6 @@ function sources ({countStart}) {
   }
 }
 
-function intent (source) {
-  const count$ = source.props.countStart$
-  const increment$ = source.DOM.clickIncrement$.mapTo(1)
-  const decrement$ = source.DOM.clickDecrement$.mapTo(-1)
-  const multiplier$ = source.DOM.changeMultiplier$.map(e => e.target.value)
-  return {
-    count$,
-    increment$,
-    decrement$,
-    multiplier$
-  }
-}
-
-function model ({count$, increment$, decrement$, multiplier$}) {
-  const reducerCount$ = count$.map(count => state => ({
-    ...state,
-    count
-  }))
-  const reducerIncCount$ = Observable
-    .merge(increment$, decrement$)
-    .map(num => state => ({
-      ...state,
-      count: state.count + num * state.multiplier
-    }))
-  const reducerMultiplier$ = multiplier$
-    .map(multiplier => state => ({
-      ...state,
-      multiplier
-    }))
-  const reducerAction$ = Observable.merge(
-    increment$.mapTo('increment'),
-    decrement$.mapTo('decrement')
-  ).map(action => state => ({
-    ...state,
-    action
-  }))
-
-  const reducer$ = Observable.merge(
-    reducerCount$,
-    reducerIncCount$,
-    reducerMultiplier$,
-    reducerAction$
-  )
-  const state$ = reducer$.startWith(initialState)
-    .scan((acc, reducer) => reducer(acc))
-    .publishReplay(1).refCount()
-  return state$
-}
-
 function subscribeViewData (state$, data) {
   state$.subscribe(({count, multiplier, action}) => {
     // The data needs to be mutated here because,
@@ -84,17 +31,17 @@ function subscribeViewData (state$, data) {
 }
 
 function subscribeEmitEvent (action, state$, $emit) {
-  const {increment$, decrement$} = action
+  const {increment$, decrement$, count$} = action
 
-  const count$ = state$.map(state => state.count).distinctUntilChanged()
-  const act$ = Observable.merge(increment$, decrement$)
+  const updateCount$ = state$.map(state => state.count).distinctUntilChanged()
+  const act$ = Observable.merge(increment$, decrement$, count$)
     .withLatestFrom(state$, (act, state) => state)
     .map(({action, multiplier}) => ({
       action,
       multiplier
     }))
 
-  count$.subscribe(value => $emit('update:count', value))
+  updateCount$.subscribe(value => $emit('update:count', value))
   act$.subscribe(value => $emit('update:act', value))
 }
 

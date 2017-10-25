@@ -29,7 +29,7 @@ export default {
     return {
       cycleDispose: () => {},
       propsStream: {
-        countStart: new BehaviorSubject(this.countStart)
+        countStart: new BehaviorSubject(this.countStart || 10)
       }
     }
   },

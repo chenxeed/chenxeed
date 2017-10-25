@@ -24,7 +24,8 @@ export function App (source) {
   }
   const reducerCount$ = changeCountStart$.map(count => state => ({
     ...state,
-    count
+    count,
+    action: 'start'
   }))
   const reducerIncCount$ = Observable.merge(increment$, decrement$).map(num => state => ({
     ...state,
@@ -54,7 +55,7 @@ export function App (source) {
 
   // published events
   const count$ = state$.map(state => state.count).distinctUntilChanged()
-  const act$ = Observable.merge(increment$, decrement$)
+  const act$ = Observable.merge(increment$, decrement$, changeCountStart$)
     .withLatestFrom(state$, (act, state) => state)
     .map(({action, multiplier}) => ({
       action,
