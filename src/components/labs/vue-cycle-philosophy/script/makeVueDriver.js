@@ -28,3 +28,21 @@ export function makeVuePropsDriver (propsStream) {
     }
   }
 }
+
+export function makeVueDataDriver (vueData) {
+  return function vueDataDriver (sink$) {
+    sink$.addListener({
+      next: state => {
+        // The data needs to be mutated here because,
+        // that's how vueJS update the templates. The data object
+        // has Observer that check and update template whenever
+        // the value is mutated
+        Object.keys(state).forEach(key => {
+          vueData[key] = state[key]
+        })
+      },
+      error: console.error,
+      completed: console.warn
+    })
+  }
+}

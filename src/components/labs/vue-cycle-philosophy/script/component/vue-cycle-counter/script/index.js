@@ -1,6 +1,9 @@
-import { Observable, Subject, BehaviorSubject } from 'rxjs'
+import { Subject, BehaviorSubject } from 'rxjs'
+import xs from 'xstream'
 import { intent } from './app/intent'
 import { model, initialState } from './app/model'
+import { sink } from './app/sink'
+import { makeVueDataDriver, makeVueEmitDriver } from '../../../makeVueDriver'
 
 function sources ({countStart}) {
   const props = {
@@ -18,33 +21,6 @@ function sources ({countStart}) {
   }
 }
 
-function subscribeViewData (state$, data) {
-  state$.subscribe(({count, multiplier, action}) => {
-    // The data needs to be mutated here because,
-    // that's how vueJS update the templates. The data object
-    // has Observer that check and update template whenever
-    // the value is mutated
-    data.count = count
-    data.multiplier = multiplier
-    data.action = action
-  })
-}
-
-function subscribeEmitEvent (action, state$, $emit) {
-  const {increment$, decrement$, count$} = action
-
-  const updateCount$ = state$.map(state => state.count).distinctUntilChanged()
-  const act$ = Observable.merge(increment$, decrement$, count$)
-    .withLatestFrom(state$, (act, state) => state)
-    .map(({action, multiplier}) => ({
-      action,
-      multiplier
-    }))
-
-  updateCount$.subscribe(value => $emit('update:count', value))
-  act$.subscribe(value => $emit('update:act', value))
-}
-
 export default {
   name: 'vue-cycle-counter',
   props: {
@@ -56,12 +32,14 @@ export default {
       viewData: initialState
     }
   },
+  watch: {
+    countStart (value) {
+      this.source.props.countStart$.next(value)
+    }
+  },
   computed: {
     counts () {
       return `${this.viewData.count}${this.viewData.count > 1 ? ' times' : ' time'}`
-    },
-    multiplier () {
-      return this.viewData.multiplier
     }
   },
   methods: {
@@ -76,16 +54,19 @@ export default {
     }
   },
   created () {
-    const vm = this
+    // get object of data for view and $emit function from vueComponent instance
+    const { viewData, $emit } = this
+    // connect the component source into intent to get the action
     const action = intent(this.source)
+    // connect the action to model to get the state
     const state$ = model(action)
-    // Side Effect
-    subscribeViewData(state$, vm.viewData)
-    subscribeEmitEvent(action, state$, vm.$emit.bind(this))
-  },
-  watch: {
-    countStart (value) {
-      this.source.props.countStart$.next(value)
-    }
+    // generate side effect sinks from action and state
+    const {
+      vueData$,
+      emitEvent$
+    } = sink(action, state$)
+    // connect to driver to run the side effects
+    makeVueDataDriver(viewData)(xs.from(vueData$))
+    makeVueEmitDriver($emit.bind(this))(xs.from(emitEvent$))
   }
 }

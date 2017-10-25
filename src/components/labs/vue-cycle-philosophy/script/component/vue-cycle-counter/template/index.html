@@ -5,6 +5,6 @@
     <button v-on:click="clickIncrement">(+)</button>
     <button v-on:click="clickDecrement">(-)</button>
     by
-    <input type="number" v-on:change="changeMultiplier" :value="multiplier" /> times.
+    <input type="number" v-on:change.number="changeMultiplier" :value="viewData.multiplier" /> times.
   </div>
 </div>

@@ -1,7 +1,7 @@
 import xs from 'xstream'
 import { Observable } from 'rxjs'
 import { makeDOMDriver, div, h3, button, p, label, input } from '@cycle/dom'
-import { makeVueEmitDriver, makeVuePropsDriver } from './makeVueDriver'
+import { makeVueEmitDriver, makeVuePropsDriver } from '../../makeVueDriver'
 
 export function App (source) {
   // intent

@@ -21,7 +21,7 @@ export function model ({count$, increment$, decrement$, multiplier$}) {
   const reducerMultiplier$ = multiplier$
     .map(multiplier => state => ({
       ...state,
-      multiplier
+      multiplier: multiplier
     }))
   const reducerAction$ = Observable.merge(
     increment$.mapTo('increment'),
