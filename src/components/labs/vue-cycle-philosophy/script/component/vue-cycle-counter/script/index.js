@@ -3,21 +3,35 @@ import xs from 'xstream'
 import { intent } from './app/intent'
 import { model, initialState } from './app/model'
 import { sink } from './app/sink'
-import { makeVueDataDriver, makeVueEmitDriver } from '../../../makeVueDriver'
+import { makeVueDataDriver, makeVueEmitDriver, makeVuePropsDriver } from '../../../makeVueDriver'
 
-function sources ({countStart}) {
-  const props = {
-    countStart$: new BehaviorSubject(countStart)
-  }
+function makeSource ({countStart, viewData, $emit}) {
+  const props = makeVuePropsDriver({
+    countStart: new BehaviorSubject(countStart)
+  })()
   const DOM = {
     clickIncrement$: new Subject(),
     clickDecrement$: new Subject(),
     changeMultiplier$: new Subject()
   }
 
+  const vueData$ = new Subject()
+  const vueData = makeVueDataDriver(viewData)(xs.from(vueData$))
+
+  const emitEvent$ = new Subject()
+  const emitEvent = makeVueEmitDriver($emit)(xs.from(emitEvent$))
+
   return {
-    props,
-    DOM
+    source: {
+      props,
+      DOM,
+      vueData,
+      emitEvent
+    },
+    proxy: {
+      vueData$,
+      emitEvent$
+    }
   }
 }
 
@@ -28,13 +42,13 @@ export default {
   },
   data () {
     return {
-      source: sources({countStart: this.countStart}),
+      source: {},
       viewData: initialState
     }
   },
   watch: {
     countStart (value) {
-      this.source.props.countStart$.next(value)
+      this.source.props.select('countStart').next(value)
     }
   },
   computed: {
@@ -54,8 +68,13 @@ export default {
     }
   },
   created () {
-    // get object of data for view and $emit function from vueComponent instance
-    const { viewData, $emit } = this
+    // initialize source
+    const { source, proxy } = makeSource({
+      countStart: this.countStart,
+      viewData: this.viewData,
+      $emit: this.$emit.bind(this)
+    })
+    this.source = source
     // connect the component source into intent to get the action
     const action = intent(this.source)
     // connect the action to model to get the state
@@ -65,8 +84,8 @@ export default {
       vueData$,
       emitEvent$
     } = sink(action, state$)
-    // connect to driver to run the side effects
-    makeVueDataDriver(viewData)(xs.from(vueData$))
-    makeVueEmitDriver($emit.bind(this))(xs.from(emitEvent$))
+    // connect to driver proxy to run the side effects
+    vueData$.subscribe(proxy.vueData$)
+    emitEvent$.subscribe(proxy.emitEvent$)
   }
 }
