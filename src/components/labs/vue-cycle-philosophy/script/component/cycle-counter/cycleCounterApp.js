@@ -12,6 +12,7 @@ export function App (source) {
   const changeMultiplier$ = source.DOM.select('.multiplier')
     .events('change')
   const changeCountStart$ = source.vueProps.select('countStart')
+  const resetCounter$ = source.vueProps.select('resetCounter')
   // action
   const increment$ = clickIncrement$.mapTo(1).share()
   const decrement$ = clickDecrement$.mapTo(-1).share()
@@ -22,11 +23,12 @@ export function App (source) {
     multiplier: 1,
     action: 'start'
   }
-  const reducerCount$ = changeCountStart$.map(count => state => ({
-    ...state,
-    count,
-    action: 'start'
-  }))
+  const reducerCount$ = Observable.merge(changeCountStart$, resetCounter$)
+    .map(count => state => ({
+      ...state,
+      count,
+      action: 'start'
+    }))
   const reducerIncCount$ = Observable.merge(increment$, decrement$).map(num => state => ({
     ...state,
     count: state.count + num * state.multiplier

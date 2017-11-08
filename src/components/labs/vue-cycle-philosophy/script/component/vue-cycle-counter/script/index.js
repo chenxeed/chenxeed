@@ -13,14 +13,15 @@ import { makeVueDataDriver, makeVueEmitDriver, makeVuePropsDriver } from '../../
 
 // Initialize the proxy streams of the source needed for the app flows,
 // which also initialize the cycle drivers to generate the source needed
-function makeSource ({countStart, viewData, $emit}) {
+function makeSource ({countStart, resetCounter, viewData, $emit}) {
   // Use vue props driver to create the proxy streams to connect the component
   // props to app intent.
   // The props will be connected on the component "watch".
   // To get the initial value of the props, pass the initial value on
   // run function makeSource() in "created()"
   const props = makeVuePropsDriver({
-    countStart: new BehaviorSubject(countStart)
+    countStart: new BehaviorSubject(countStart),
+    resetCounter
   })()
 
   // Create each DOM event streams proxy to connect the DOM event from vue template.
@@ -66,7 +67,8 @@ export default {
   name: 'vue-cycle-counter',
   // the props retrieved from parent
   props: {
-    'countStart': Number
+    'countStart': Number,
+    'resetCounter': Subject
   },
   // The vue component "data()" is generally used for component state internally.
   // 
@@ -144,6 +146,7 @@ export default {
     // initialize source
     const { source, proxy } = makeSource({
       countStart: this.countStart,
+      resetCounter: this.resetCounter,
       viewData: this.viewData,
       $emit: this.$emit.bind(this)
     })

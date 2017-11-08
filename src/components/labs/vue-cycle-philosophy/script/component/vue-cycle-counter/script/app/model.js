@@ -6,12 +6,14 @@ export const initialState = {
   action: 'start'
 }
 
-export function model ({count$, increment$, decrement$, multiplier$}) {
-  const reducerCount$ = count$.map(count => state => ({
-    ...state,
-    count,
-    action: 'start'
-  }))
+export function model ({count$, reset$, increment$, decrement$, multiplier$}) {
+  const reducerCount$ = Observable
+    .merge(count$, reset$)
+    .map(count => state => ({
+      ...state,
+      count,
+      action: 'start'
+    }))
   const reducerIncCount$ = Observable
     .merge(increment$, decrement$)
     .map(num => state => ({

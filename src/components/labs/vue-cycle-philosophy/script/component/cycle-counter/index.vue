@@ -15,7 +15,7 @@
 </style>
 
 <script>
-import { BehaviorSubject } from 'rxjs'
+import { BehaviorSubject, Subject } from 'rxjs'
 import { App, makeDriver } from './cycleCounterApp'
 import run from '@cycle/rxjs-run'
 
@@ -29,7 +29,8 @@ import run from '@cycle/rxjs-run'
 export default {
   name: 'cycle-counter',
   props: {
-    'countStart': Number
+    'countStart': Number,
+    'resetCounter': Subject
   },
   // The vue component "data()" is generally used for component state internally.
   // 
@@ -45,7 +46,8 @@ export default {
     return {
       cycleDispose: () => {},
       propsStream: {
-        countStart: new BehaviorSubject(this.countStart || 10)
+        countStart: new BehaviorSubject(this.countStart || 10),
+        resetCounter: this.resetCounter
       }
     }
   },

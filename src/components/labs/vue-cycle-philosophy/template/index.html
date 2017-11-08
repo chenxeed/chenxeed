@@ -29,6 +29,7 @@
       <div class="mdl-cell mdl-cell--4-col">
         <h3>Cycle Counter Component</h3>
         <cycle-counter
+          :reset-counter="resetCounter"
           :count-start="counterStart"
           @update:count="cycleCounterChange"
           @update:act="cycleCounterActionChange"
@@ -43,6 +44,7 @@
       <div class="mdl-cell mdl-cell--4-col">
         <h3>Cycle Counter Component</h3>
         <vue-cycle-counter class="mdl-cell mdl-cell--6-col"
+          :reset-counter="resetCounter"
           :count-start="counterStart"
           @update:count="vueCycleCounterChange"
           @update:act="vueCycleCounterActionChange"
