@@ -11,6 +11,23 @@ module.exports = {
   },
   // https://github.com/standard/standard/blob/master/docs/RULES-en.md
   extends: 'standard',
+  // allowed global for jest
+  globals: {
+    "jest": true,
+    "expect": true,
+    "mockFn": true,
+    "config": true,
+    "afterEach": true,
+    "beforeEach": true,
+    "describe": true,
+    "it": true,
+    "runs": true,
+    "waitsFor": true,
+    "pit": true,
+    "require": true,
+    "xdescribe": true,
+    "xit": true
+  },
   // required to lint *.vue files
   plugins: [
     'html'
