@@ -28,9 +28,17 @@ import run from '@cycle/rxjs-run'
 
 export default {
   name: 'cycle-counter',
+  // Props value passed from parent
+  // Note: Using same props name with data() will bind the value
   props: {
-    'countStart': Number,
-    'resetCounter': Subject
+    'countStart': {
+      type: Number,
+      default: 10
+    },
+    'resetCounter': {
+      type: Subject,
+      default: () => new Subject()
+    }
   },
   // The vue component "data()" is generally used for component state internally.
   // 
@@ -46,7 +54,7 @@ export default {
     return {
       cycleDispose: () => {},
       propsStream: {
-        countStart: new BehaviorSubject(this.countStart || 10),
+        countStart: new BehaviorSubject(this.countStart),
         resetCounter: this.resetCounter
       }
     }

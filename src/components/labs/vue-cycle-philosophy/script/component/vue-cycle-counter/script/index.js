@@ -65,10 +65,17 @@ function makeSource ({countStart, resetCounter, viewData, $emit}) {
 
 export default {
   name: 'vue-cycle-counter',
-  // the props retrieved from parent
+  // Props value passed from parent
+  // Note: Using same props name with data() will bind the value
   props: {
-    'countStart': Number,
-    'resetCounter': Subject
+    'countStart': {
+      type: Number,
+      default: 10
+    },
+    'resetCounter': {
+      type: Subject,
+      default: () => new Subject()
+    }
   },
   // The vue component "data()" is generally used for component state internally.
   // 

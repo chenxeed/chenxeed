@@ -5,13 +5,19 @@ export default {
   // Props value passed from parent
   // Note: Using same props name with data() will bind the value
   props: {
-    'countStart': Number,
-    'resetCounter': Subject
+    'countStart': {
+      type: Number,
+      default: 10
+    },
+    'resetCounter': {
+      type: Subject,
+      default: () => new Subject()
+    }
   },
   // State of the component
   data () {
     return {
-      count: this.countStart || 10,
+      count: this.countStart,
       multiplier: 10,
       action: 'start'
     }
