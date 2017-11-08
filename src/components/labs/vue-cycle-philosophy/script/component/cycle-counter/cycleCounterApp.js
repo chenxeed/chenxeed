@@ -62,8 +62,8 @@ export function App (source) {
       multiplier
     }))
   const vueEmit$ = Observable.of({
-    'update:count': xs.from(count$),
-    'update:act': xs.from(act$)
+    'update:count': count$,
+    'update:act': act$
   })
 
   const view$ = state$.map(view)

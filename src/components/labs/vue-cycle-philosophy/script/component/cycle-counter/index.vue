@@ -15,10 +15,9 @@
 </style>
 
 <script>
-import { Observable, BehaviorSubject } from 'rxjs'
+import { BehaviorSubject } from 'rxjs'
 import { App, makeDriver } from './cycleCounterApp'
-import { setAdapt } from '@cycle/run/lib/adapt'
-import { run } from '@cycle/run'
+import run from '@cycle/rxjs-run'
 
 // Cycle-Counter
 // The proof concept of building Vue Component with pure CycleJS application,
@@ -73,7 +72,6 @@ export default {
   // which is when the vue component is "mounted"
   // and the DOM is rendered in `this.$el`
   mounted () {
-    setAdapt(Observable.from)
     // Store the returned method from cycle run() to the shared object
     // created in data() so it can be disposed later.
     // Pass all the variable and methods from the vue component instance (this)
@@ -89,7 +87,6 @@ export default {
   // usually this happens when page changed and this component is not used anymore.
   beforeDestroy () {
     // Dispose the CycleJS app to remove all the listeners
-    setAdapt(x => x)
     this.cycleDispose()
   }
 }

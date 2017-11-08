@@ -1,3 +1,6 @@
+import xs from 'xstream'
+import { adapt } from '@cycle/run/lib/adapt'
+
 export function makeVueEmitDriver ($emit) {
   // vueEmitDriver job is to run the side effect of running "$emit" to trigger
   // the emit event based on the key and stream passed from the sink.
@@ -6,7 +9,7 @@ export function makeVueEmitDriver ($emit) {
       next: emitEvents => {
         const events = Object.keys(emitEvents)
         events.forEach(event => {
-          emitEvents[event].addListener({
+          xs.from(emitEvents[event]).addListener({
             next: value => {
               $emit(event, value)
             },
@@ -35,7 +38,7 @@ export function makeVuePropsDriver (propsStream) {
   return function vuePropsDriver () {
     return {
       select: function (prop) {
-        return propsStream[prop]
+        return adapt(propsStream[prop])
       }
     }
   }
