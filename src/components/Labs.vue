@@ -9,7 +9,9 @@
         <router-link to="/labs/vue-cycle-philosophy">Vue Component with CycleJS Philosophy</router-link>
       </li>
     </ul>
-    <router-view></router-view>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
 
