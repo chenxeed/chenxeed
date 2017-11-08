@@ -8,6 +8,7 @@
     these cute counters, update this input to restart the counter value.
     <br />
     <input type="number" v-model.number="counterStart" />
+    <button v-on:click="emitResetCounter">Reset</button>
   </p>
   <div>
     
@@ -15,6 +16,7 @@
       <div class="mdl-cell mdl-cell--4-col">
         <h3>VueJS Counter Component</h3>
         <vue-counter
+          :reset-counter="resetCounter"
           :count-start="counterStart"
           @update:count="vueCounterChange"
           @update:act="vueCounterActionChange"

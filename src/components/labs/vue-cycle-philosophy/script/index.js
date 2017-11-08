@@ -1,3 +1,5 @@
+import { Subject } from 'rxjs'
+
 import VueCounter from './component/vue-counter'
 import CycleCounter from './component/cycle-counter'
 import VueCycleCounter from './component/vue-cycle-counter'
@@ -11,6 +13,7 @@ export default {
   },
   data () {
     return {
+      resetCounter: new Subject(),
       counterStart: 5678,
       vueCounterCount: 0,
       vueCounterAction: {action: 'start', multiplier: 0},
@@ -59,6 +62,10 @@ export default {
     }
   },
   methods: {
+    // Event Emitter
+    emitResetCounter () {
+      this.resetCounter.next(this.counterStart)
+    },
     // State Reducer
     vueCounterChange (count) {
       this.vueCounterCount = count

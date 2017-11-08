@@ -1,9 +1,12 @@
+import { Subject } from 'rxjs'
+
 export default {
   name: 'vue-counter',
   // Props value passed from parent
   // Note: Using same props name with data() will bind the value
   props: {
-    'countStart': Number
+    'countStart': Number,
+    'resetCounter': Subject
   },
   // State of the component
   data () {
@@ -64,6 +67,8 @@ export default {
   },
   // Event Watcher
   created () {
+    // Subscribe the action stream from outside to trigger side effect
+    this.resetCounter.subscribe(this.updateCount)
     // Emit initial data to its observer
     // PS: I wish this automatically run on watch T_T
     this.emitCount()
