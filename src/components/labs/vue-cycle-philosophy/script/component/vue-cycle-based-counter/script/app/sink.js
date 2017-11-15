@@ -14,13 +14,13 @@ export function sink (action, state$) {
       action,
       multiplier
     }))
-  const vueEmit$ = Observable.of({
+  const emitEvent$ = Observable.of({
     'update:count': xs.from(updateCount$),
     'update:act': xs.from(act$)
   })
 
   return {
     vueData$,
-    vueEmit$
+    emitEvent$
   }
 }

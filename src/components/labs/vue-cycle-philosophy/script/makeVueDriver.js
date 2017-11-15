@@ -44,6 +44,26 @@ export function makeVuePropsDriver (propsStream) {
   }
 }
 
+export function makeVueEventDriver (eventStream) {
+  // Use vue props driver to connect the stream from propsStream to app intent.
+  // The propsStream must give specific key as it will be used on function select()
+  // Ex:
+  // 
+  // propsStream = {
+  //   myname : new Subject
+  // }
+  // 
+  // const myname$ = vueProps.select('myname')
+  // 
+  return function vueEventDriver () {
+    return {
+      select: function (event) {
+        return adapt(eventStream[event])
+      }
+    }
+  }
+}
+
 export function makeVueDataDriver (vueData) {
   // vueDataDriver job is to run the side effect of manipulating vue data object,
   // based on the object passed from the sink.

@@ -1,16 +1,70 @@
 import { Subject, BehaviorSubject } from 'rxjs'
-import { VueCycleApp, initialState } from './app'
-import run from '@cycle/rxjs-run'
-import { makeVueDataDriver, makeVueEmitDriver, makeVuePropsDriver, makeVueEventDriver } from '../../../makeVueDriver'
+import xs from 'xstream'
+import { intent } from './app/intent'
+import { model, initialState } from './app/model'
+import { sink } from './app/sink'
+import { makeVueDataDriver, makeVueEmitDriver, makeVuePropsDriver } from '../../../makeVueDriver'
 
 // Vue-Cycle-Counter
 // The proof concept of building Vue Component with Cycle Philosophy,
-// by using Cycle.run library to organize the stream.
+// without the need of using Cycle.run library and the domDriver for the template.
 // The driver of the dom will be using vueDataDriver to mutate the vue data
 // and it will automatically update the template.
 
+// Initialize the proxy streams of the source needed for the app flows,
+// which also initialize the cycle drivers to generate the source needed
+function makeSource ({countStart, resetCounter, viewData, $emit}) {
+  // Use vue props driver to create the proxy streams to connect the component
+  // props to app intent.
+  // The props will be connected on the component "watch".
+  // To get the initial value of the props, pass the initial value on
+  // run function makeSource() in "created()"
+  const props = makeVuePropsDriver({
+    countStart: new BehaviorSubject(countStart),
+    resetCounter
+  })()
+
+  // Create each DOM event streams proxy to connect the DOM event from vue template.
+  // The streams will be connected on the component "methods".
+  const DOM = {
+    clickIncrement$: new Subject(),
+    clickDecrement$: new Subject(),
+    changeMultiplier$: new Subject()
+  }
+
+  // Initialize the vueDataDriver by passing the viewData,
+  // which is the object viewData from vue "data()".
+  // vueDataDriver job is to run the side effect of manipulating vue data object,
+  // based on the object passed from the sink.
+  const vueData$ = new Subject()
+  const vueData = makeVueDataDriver(viewData)(xs.from(vueData$))
+
+  // Initialize the vueEmitDriver by passing the $emit,
+  // which is the vue component "this.$emit" method to trigger emit event.
+  // vueEmitDriver job is to run the side effect of running "$emit" to trigger
+  // the emit event based on the key and stream passed from the sink.
+  const emitEvent$ = new Subject()
+  const emitEvent = makeVueEmitDriver($emit)(xs.from(emitEvent$))
+
+  // Split the returned value to source and proxy, to differentiate
+  // between the object of source for intent(), and object of proxy
+  // for triggering the side effect from sink().
+  return {
+    source: {
+      props,
+      DOM,
+      vueData,
+      emitEvent
+    },
+    proxy: {
+      vueData$,
+      emitEvent$
+    }
+  }
+}
+
 export default {
-  name: 'vue-cycle-counter',
+  name: 'vue-cycle-based-counter',
   // Props value passed from parent
   // Note: Using same props name with data() will bind the value
   props: {
@@ -36,16 +90,7 @@ export default {
   // with the reserved keyname like "source", and any future new keys)
   data () {
     return {
-      source: {
-        event: {
-          clickIncrement: new Subject(),
-          clickDecrement: new Subject(),
-          changeMultiplier: new Subject()
-        }
-      },
-      // initialState is needed to be passed to the data(),
-      // as vue component will convert the object passed here
-      // into their observable object.
+      source: {},
       viewData: initialState
     }
   },
@@ -86,17 +131,17 @@ export default {
   // side effect must be separated.
   methods: {
     clickIncrement (e) {
-      this.source.event.clickIncrement.next(e)
+      this.source.DOM.clickIncrement$.next(e)
     },
     clickDecrement (e) {
-      this.source.event.clickDecrement.next(e)
+      this.source.DOM.clickDecrement$.next(e)
     },
     changeMultiplier (e) {
-      this.source.event.changeMultiplier.next(e)
+      this.source.DOM.changeMultiplier$.next(e)
     }
   },
   // The initialization of the Component streams starts here,
-  // The process inside the VueCycleApp basically is:
+  // The process basically is:
   // 1. Initialize source
   // 2. Connect source to intent to generate action
   // 3. Connect action to model to generate state
@@ -105,17 +150,25 @@ export default {
   // 
   // Looks familiar? Yes that's usually how we do it in every cycle app :)
   created () {
-    // Initialize the cycle drivers to generate the source needed
-    const drivers = {
-      vueEvent: makeVueEventDriver(this.source.event),
-      vueData: makeVueDataDriver(this.viewData),
-      vueProps: makeVuePropsDriver({
-        countStart: new BehaviorSubject(this.countStart),
-        resetCounter: this.resetCounter
-      }),
-      vueEmit: makeVueEmitDriver(this.$emit.bind(this))
-    }
-    // Shamelessly run the Cycle App!
-    run(VueCycleApp, drivers)
+    // initialize source
+    const { source, proxy } = makeSource({
+      countStart: this.countStart,
+      resetCounter: this.resetCounter,
+      viewData: this.viewData,
+      $emit: this.$emit.bind(this)
+    })
+    this.source = source
+    // connect the component source into intent to get the action
+    const action = intent(this.source)
+    // connect the action to model to get the state
+    const state$ = model(action)
+    // generate side effect sinks from action and state
+    const {
+      vueData$,
+      emitEvent$
+    } = sink(action, state$)
+    // connect to driver proxy to run the side effects
+    vueData$.subscribe(proxy.vueData$)
+    emitEvent$.subscribe(proxy.emitEvent$)
   }
 }
