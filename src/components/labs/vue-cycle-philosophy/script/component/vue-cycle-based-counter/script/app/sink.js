@@ -1,4 +1,3 @@
-import xs from 'xstream'
 import { Observable } from 'rxjs'
 
 export function sink (action, state$) {
@@ -14,10 +13,10 @@ export function sink (action, state$) {
       action,
       multiplier
     }))
-  const emitEvent$ = Observable.of({
-    'update:count': xs.from(updateCount$),
-    'update:act': xs.from(act$)
-  })
+  const emitEvent$ = Observable.merge(
+    updateCount$.map(value => ({event: 'update:count', value})),
+    act$.map(value => ({event: 'update:act', value}))
+  )
 
   return {
     vueData$,

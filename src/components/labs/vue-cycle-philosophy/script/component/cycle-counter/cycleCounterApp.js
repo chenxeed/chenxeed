@@ -63,10 +63,10 @@ export function App (source) {
       action,
       multiplier
     }))
-  const vueEmit$ = Observable.of({
-    'update:count': count$,
-    'update:act': act$
-  })
+  const vueEmit$ = Observable.merge(
+    count$.map(value => ({event: 'update:count', value})),
+    act$.map(value => ({event: 'update:act', value}))
+  )
 
   const view$ = state$.map(view)
   return {

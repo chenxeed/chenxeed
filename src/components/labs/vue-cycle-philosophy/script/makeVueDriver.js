@@ -1,4 +1,3 @@
-import xs from 'xstream'
 import { adapt } from '@cycle/run/lib/adapt'
 
 export function makeVueEmitDriver ($emit) {
@@ -6,17 +5,8 @@ export function makeVueEmitDriver ($emit) {
   // the emit event based on the key and stream passed from the sink.
   return function vueEmitDriver (sink$) {
     sink$.addListener({
-      next: emitEvents => {
-        const events = Object.keys(emitEvents)
-        events.forEach(event => {
-          xs.from(emitEvents[event]).addListener({
-            next: value => {
-              $emit(event, value)
-            },
-            error: console.error,
-            completed: console.warn
-          })
-        })
+      next: ({event, value}) => {
+        $emit(event, value)
       },
       error: console.error,
       completed: console.warn
