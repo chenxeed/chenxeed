@@ -9,6 +9,7 @@ const Hello = () => import('@/components/Hello')
 const Labs = () => import('@/components/Labs')
 const VueSplitFiles = () => import('@/components/labs/vue-split-files')
 const VueCyclePhilosophy = () => import('@/components/labs/vue-cycle-philosophy')
+const VueTodo = () => import('@/components/labs/vue-todo')
 
 Vue.use(Router)
 Vue.use(Meta)
@@ -34,6 +35,10 @@ export default new Router({
         {
           path: 'vue-cycle-philosophy',
           component: VueCyclePhilosophy
+        },
+        {
+          path: 'vue-todo',
+          component: VueTodo
         }
       ]
     }

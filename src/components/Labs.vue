@@ -8,6 +8,9 @@
       <li>
         <router-link to="/labs/vue-cycle-philosophy">Vue Component with CycleJS Philosophy</router-link>
       </li>
+      <li>
+        <router-link to="/labs/vue-todo">Todo App written as Vue Component</router-link>
+      </li>
     </ul>
     <keep-alive>
       <router-view></router-view>
