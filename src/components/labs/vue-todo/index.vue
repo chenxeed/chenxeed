@@ -1,10 +1,11 @@
 <template>
   <div class="app-wrapper">
     <todo-app></todo-app>
+    <todo-app></todo-app>
   </div>
 </template>
 <script>
-import TodoApp from './component/todo-app'
+import TodoApp from './app/todo-app'
 
 export default {
   name: 'vue-todo',

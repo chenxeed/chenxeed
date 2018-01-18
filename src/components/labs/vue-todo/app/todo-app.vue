@@ -6,8 +6,8 @@
     </div>
 </template>
 <script>
-import InputForm from './input-form'
-import Todo from './todo'
+import InputForm from '../component/input-form'
+import Todo from '../component/todo'
 
 export default {
   name: 'todo-app',
