@@ -10,7 +10,10 @@ module.exports = {
     browser: true,
   },
   // https://github.com/standard/standard/blob/master/docs/RULES-en.md
-  extends: 'standard',
+  extends: [
+    'standard',
+    'plugin:vue/recommended'
+  ],
   // allowed global for jest
   globals: {
     "jest": true,

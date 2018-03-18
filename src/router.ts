@@ -6,6 +6,7 @@ import About from './views/About.vue';
 Vue.use(Router);
 
 export default new Router({
+  mode : 'history',
   routes: [
     {
       path: '/',
@@ -18,4 +19,11 @@ export default new Router({
       component: About,
     },
   ],
+  scrollBehavior(to, from, savedPosition) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve({ x: 0, y: 0 });
+      }, 200);
+    });
+  }
 });

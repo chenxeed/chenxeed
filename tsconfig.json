@@ -18,7 +18,8 @@
       "@/*": [
         "src/*"
       ]
-    }
+    },
+    "strictPropertyInitialization": false
   },
   "include": [
     "src/**/*.ts",
