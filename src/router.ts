@@ -16,6 +16,18 @@ export default new Router({
       name: 'about',
       component: () => import('./views/About.vue')
     },
+    {
+      path: '/labs',
+      name: 'labs',
+      component: () => import('./views/Labs/index.vue'),
+      children: [
+        {
+          path: 'alien-invasion',
+          name: 'alien-invasion',
+          component: () => import('./views/Labs/AlienInvasion/index.vue')
+        }
+      ]
+    },
   ],
   scrollBehavior(to, from, savedPosition) {
     return new Promise((resolve, reject) => {

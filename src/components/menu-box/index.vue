@@ -1,11 +1,15 @@
 <template>
-  <div class="boxes medium has-text-centered">
+  <div
+    class="boxes has-text-centered"
+    :class="size">
     <div class="boxes__icon">
       <i
         class="icon mdi"
         :class="chosenIcon"/>
     </div>
-    <div class="boxes__title is-size-4">
+    <div
+      class="boxes__title"
+      :class="fontSize">
       <slot name="label"></slot>
     </div>
   </div>
@@ -18,8 +22,18 @@ export default class MenuBox extends Vue {
   @Prop({ default : 'bell' })
   public icon: string;
 
+  @Prop({ default : 'medium' })
+  public size: string;
+
   get chosenIcon() {
     return 'mdi-' + this.icon;
+  }
+
+  get fontSize() {
+    switch (this.size) {
+      case 'small' : return 'is-size-6';
+      case 'medium' : return 'is-size-4';
+    }
   }
 }
 </script>
@@ -32,6 +46,22 @@ export default class MenuBox extends Vue {
   color: $white-ter;
   display: inline-flex;
   flex-direction: column;
+
+  &.small {
+    height: 150px;
+    width: 150px;
+
+    .boxes__icon {
+      margin-top: 20%;
+      margin-bottom: 10%;
+
+      .icon {
+        font-size: 40px;
+        width: 50px;
+        height: 50px;
+      }      
+    }
+  }
 
   &.medium {
     height: 300px;
@@ -47,8 +77,6 @@ export default class MenuBox extends Vue {
         height: 110px;
       }      
     }
-
-
   }
 
 }

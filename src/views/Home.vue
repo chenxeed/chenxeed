@@ -8,12 +8,13 @@
     </div>
     <div class="columns has-text-centered">
       <div class="column">
-        <menu-box icon="led-on">
-          <div slot="label">
-            Labs <br/>
-            <span class="is-size-6">Coming soon..</span>
-          </div>
-        </menu-box>
+        <router-link to="/labs">
+          <menu-box icon="led-on">
+            <div slot="label">
+              Labs
+            </div>
+          </menu-box>
+        </router-link>
       </div>
       <div class="column">
         <menu-box icon="library-books">
