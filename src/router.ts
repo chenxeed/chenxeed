@@ -25,6 +25,11 @@ export default new Router({
           path: 'alien-invasion',
           name: 'alien-invasion',
           component: () => import('./views/Labs/AlienInvasion/index.vue')
+        },
+        {
+          path: 'nested-component',
+          name: 'nested-component',
+          component: () => import('./views/Labs/NestedComponent/index.vue')
         }
       ]
     },

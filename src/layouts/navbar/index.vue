@@ -31,9 +31,11 @@
             Labs
           </router-link>
           <div class="navbar-dropdown is-boxed">
-            <a class="navbar-item" href="/documentation/overview/start/">
-              Alien Invasion
-            </a>
+            <template v-for="list in labsLists">
+              <router-link class="navbar-item" :to="list.link">
+                {{ list.title }}
+              </router-link>
+            </template>
           </div>
         </div>
         <router-link to="/about" class="navbar-item">
@@ -75,11 +77,16 @@
 </template>
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import { mapState } from 'vuex';
 
-@Component({
-})
+@Component({})
 
 export default class Home extends Vue {
+
+  get labsLists() {
+    return this.$store.state.labsLists;
+  }
+
   private isActive = false;
 
   private clickBurger() {

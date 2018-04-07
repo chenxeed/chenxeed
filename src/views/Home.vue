@@ -1,10 +1,10 @@
 <template>
   <div class="container">
-    <div class="has-text-centered">
-      <span>Hi! Welcome to</span>
-      <h1 class="title is-1">ChenXeed</h1>
-      <img class="has-text-centered" src="~@/assets/logo.png">
-      <h2 class="subtitle is-1">Showcase Website</h2>
+    <div class="columns">
+      <div class="column has-text-centered is-three-fifths is-offset-one-fifth">
+        <img class="has-text-centered" src="~@/assets/logo.png">
+        <h2 class="subtitle is-1">Showcase Website</h2>
+      </div>
     </div>
     <div class="columns has-text-centered">
       <div class="column">

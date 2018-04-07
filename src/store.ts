@@ -1,11 +1,22 @@
 import Vue from 'vue';
-import Vuex from 'vuex';
+import Vuex, { StoreOptions } from 'vuex';
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
+const store: StoreOptions<TGlobalStore.IState> = {
   state: {
-
+    labsLists : [
+      {
+        title : 'Alien Invasion',
+        link : '/labs/alien-invasion',
+        icon : 'xbox-controller'
+      },
+      {
+        title : 'Nested Components',
+        link : `/labs/nested-component`,
+        icon : 'xbox-controller'
+      }
+    ]
   },
   mutations: {
 
@@ -13,4 +24,6 @@ export default new Vuex.Store({
   actions: {
 
   },
-});
+};
+
+export default new Vuex.Store(store);
