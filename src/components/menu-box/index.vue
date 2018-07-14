@@ -54,7 +54,7 @@ export default class MenuBox extends Vue {
 .boxes {
   display: inline-flex;
   flex-direction: column;
-
+  white-space: normal;
   transition: 0.2s all;
 
   &.xsmall {
