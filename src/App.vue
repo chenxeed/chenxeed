@@ -20,6 +20,8 @@ import NavBar from '@/layouts/navbar/index.vue';
 
 export default class App extends Vue {}
 </script>
+<style src="bulma/css/bulma.css"></style>
+<style src="mdi/css/materialdesignicons.css"></style>
 <style lang="scss">
 .fade-enter-active,
 .fade-leave-active {
