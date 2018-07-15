@@ -15,6 +15,11 @@ const store: StoreOptions<TGlobalStore.IState> = {
         title : 'Nested Components',
         link : `/labs/nested-component`,
         icon : 'xbox-controller'
+      },
+      {
+        title : 'TUI Image Editor',
+        link : `/labs/tui-image-editor`,
+        icon : 'image-filter'
       }
     ]
   },

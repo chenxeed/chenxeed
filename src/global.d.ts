@@ -10,3 +10,7 @@ declare namespace TGlobalStore {
     labsLists: TGlobalStore.ILabsList[];
   }
 }
+
+declare module 'tui-image-editor';
+declare module '*.jpg';
+declare module '*.svg';

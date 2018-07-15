@@ -30,6 +30,11 @@ export default new Router({
           path: 'nested-component',
           name: 'nested-component',
           component: () => import('./views/Labs/NestedComponent/index.vue')
+        },
+        {
+          path: 'tui-image-editor',
+          name: 'tui-image-editor',
+          component: () => import('./views/Labs/TuiImageEditor/index.vue')
         }
       ]
     },
