@@ -32,7 +32,7 @@
           </router-link>
           <div class="navbar-dropdown is-boxed">
             <template v-for="list in labsLists">
-              <router-link class="navbar-item" :to="list.link">
+              <router-link :key="list.title" class="navbar-item" :to="list.link">
                 {{ list.title }}
               </router-link>
             </template>

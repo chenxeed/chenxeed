@@ -35,6 +35,11 @@ export default new Router({
           path: 'tui-image-editor',
           name: 'tui-image-editor',
           component: () => import('./views/Labs/TuiImageEditor/index.vue')
+        },
+        {
+          path: 'drag-drop-element',
+          name: 'drag-drop-element',
+          component: () => import('./views/Labs/DragDropElement/index.vue')
         }
       ]
     },

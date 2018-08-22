@@ -20,6 +20,11 @@ const store: StoreOptions<TGlobalStore.IState> = {
         title : 'TUI Image Editor',
         link : `/labs/tui-image-editor`,
         icon : 'image-filter'
+      },
+      {
+        title : 'Drag Drop Element',
+        link : `/labs/drag-drop-element`,
+        icon : 'arrow-all'
       }
     ]
   },
