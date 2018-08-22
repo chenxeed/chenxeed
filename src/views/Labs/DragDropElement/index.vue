@@ -3,31 +3,46 @@
   <div class="wrapper">
 
     <div>
-      Number of Block(s) :
-      <input v-model="blockCount" />
+      Switch Mode
+      <select v-model="selectedMode">
+        <option value="vue">Vue</option>
+        <option value="native">Native</option>
+      </select>
+      <div>
+        Number of Block(s) :
+        <input v-model="blockCount" />
+      </div>
+
+      <div>
+        Number of Element(s) in each block :
+        <input v-model="elementCount" />
+      </div>
+
+      <div>
+        Debug Average (ms) {{ debugAverage }}
+      </div>
     </div>
 
-    <div>
-      Number of Element(s) in each block :
-      <input v-model="elementCount" />
-    </div>
+    <template v-if="selectedMode === 'vue'">
+      <div v-for="blockId in blockList" :key="blockId" class="block">
+        <template v-for="elementId in blocks[blockId].elements">
+          <div
+            :key="elementId"
+            :id="`element-${elementId}`"
+            :style="elementStyle(elements[elementId])"
+            class="element"
+            @mousedown.prevent="mouseDownElement">
+            <img src="~./test.jpg" />
+          </div>
+        </template>
+      </div>
+    </template>
 
-    <div>
-      Debug Average {{ debugAverage }}
-    </div>
+    <template v-if="selectedMode === 'native'">
+      <div id="nativeWrapper">
+      </div>
+    </template>
 
-    <div v-for="blockId in blockList" :key="blockId" class="block">
-      <template v-for="elementId in blocks[blockId].elements">
-        <div
-          :key="elementId"
-          :id="`element-${elementId}`"
-          :style="elementStyle(elements[elementId])"
-          class="element"
-          @mousedown.prevent="mouseDownElement">
-          <img src="~./test.jpg" />
-        </div>
-      </template>
-    </div>
   </div>
   
 </template>
@@ -35,7 +50,7 @@
 // { left : elements[elementId].x+'px', top : elements[elementId].y+'px' }
 // elementStyle(elements[elementId])
 import { Component, Watch, Vue } from 'vue-property-decorator';
-import { performance } from 'perf_hooks';
+import imageUrl from './test.jpg';
 
 interface IBlock {
   id: string;
@@ -69,6 +84,8 @@ type IElementList = Array<IElement['id']>;
 
 export default class DragDropElement extends Vue {
 
+  private selectedMode: string = 'vue';
+
   private blocks: IBlocks  = {};
   private blockList: IBlockList = [];
   private elements: IElements = {};
@@ -82,18 +99,36 @@ export default class DragDropElement extends Vue {
   private debugTime: number[] = [];
 
   get debugAverage() {
-    const sum = this.debugTime.reduce( (total: number, val: number) => total + val, 0);
+    const sum = this.debugTime
+      .reduce( (total: number, val: number) => total + val, 0);
     return sum === 0 ? sum : sum / this.debugTime.length;
   }
 
   @Watch('blockCount', { immediate : true } )
-  private onBlockCount( val: number ) {
-    this.generateElement();
+  private onBlockCount() {
+    this.initMode();
   }
 
   @Watch('elementCount', { immediate : true } )
-  private onElementCount( val: number ) {
-    this.generateElement();
+  private onElementCount() {
+    this.initMode();
+  }
+
+  @Watch('selectedMode', { immediate : true })
+  private async onSelectMode( val: string ) {
+    this.initMode();
+  }
+
+  private async initMode() {
+    switch (this.selectedMode) {
+      case 'vue' :
+        this.generateElement();
+        break;
+      case 'native' :
+        await this.$nextTick();
+        this.nativeDragDropScript();
+        break;
+    }
   }
 
   private generateElement() {
@@ -103,18 +138,18 @@ export default class DragDropElement extends Vue {
     this.elementList = [];
     for ( let i = 0; i < this.blockCount; i++ ) {
       const newBlockId = this.getId();
-      this.$set( this.blocks, newBlockId, {
+      this.blocks[newBlockId] = {
         id : newBlockId,
         elements : []
-      });
+      };
       this.blockList.push( newBlockId );
       for ( let j = 0; j < this.elementCount; j++ ) {
         const newElementId = this.getId();
-        this.$set( this.elements, newElementId, {
+        this.elements[newElementId] = {
           id : newElementId,
           x : Math.round(Math.random() * 600),
           y : Math.round(Math.random() * 350)
-        });
+        };
         this.elementList.push( newElementId );
         this.blocks[newBlockId].elements.push( newElementId );
       }
@@ -142,13 +177,13 @@ export default class DragDropElement extends Vue {
     this.chosenElement = Object.assign({}, this.elements[elementId] );
     document.addEventListener( 'mousemove', this.mouseMoveElement );
     document.addEventListener( 'mouseup', this.mouseUpElement );
-    this.debugTime = [];
-    this.performanceFlag = Date.now();
+    this.debugReset();
+    this.debugInit();
   }
 
   private mouseMoveElement( e: MouseEvent ) {
-    this.debugTime.push( Date.now() - this.performanceFlag );
-    this.performanceFlag = Date.now();
+    this.debugFlag();
+    this.debugInit();
     if ( this.mouseDownCoord && this.chosenElement ) {
       const moveCoordinate = {
         x : e.pageX - this.mouseDownCoord.x,
@@ -166,10 +201,94 @@ export default class DragDropElement extends Vue {
     document.removeEventListener( 'mouseup', this.mouseUpElement );
   }
 
+  private debugReset() {
+    this.debugTime = [];
+  }
+
+  private debugInit() {
+    this.performanceFlag = Date.now();
+  }
+
+  private debugFlag() {
+    this.debugTime.push( Date.now() - this.performanceFlag );
+  }
+
+  private nativeDragDropScript() {
+    const vm = this;
+    const wrapper = this.$el.querySelector('#nativeWrapper');
+    if ( !wrapper ) {
+      return;
+    }
+    // reset the wrapper before running the script
+    wrapper.innerHTML = '';
+    const blockCount = this.blockCount;
+    const elementCount = this.elementCount;
+    const initialCoord: {x?: number; y?: number; } = {};
+    const chosenElement: {x?: number; y?: number; elm?: HTMLElement} = {};
+    for ( let i = 0; i < blockCount; i++ ) {
+      const newBlockId = this.getId();
+      const blockDiv = document.createElement('div');
+      blockDiv.setAttribute('class', 'block');
+      blockDiv.id = 'block-' + newBlockId;
+      wrapper.appendChild(blockDiv);
+      for ( let j = 0; j < elementCount; j++ ) {
+        const newElementId = this.getId();
+        const elementDiv = document.createElement('div');
+        const x = Math.round(Math.random() * 600);
+        const y = Math.round(Math.random() * 350);
+        elementDiv.id = 'element-' + newElementId;
+        elementDiv.setAttribute('class', 'element');
+        elementDiv.setAttribute('style', `left: ${x}px; top: ${y}px`);
+        elementDiv.addEventListener('mousedown', onMouseDown);
+        const image = document.createElement('img');
+        image.src = imageUrl;
+        elementDiv.appendChild(image);
+        blockDiv.appendChild(elementDiv);
+      }
+    }
+
+    function onMouseDown(e: MouseEvent) {
+      e.preventDefault();
+      const target = e.target as HTMLElement;
+      if ( target.style.top && target.style.left ) {
+        initialCoord.x = e.pageX;
+        initialCoord.y = e.pageY;
+        chosenElement.x = parseInt(target.style.left, 10);
+        chosenElement.y = parseInt(target.style.top, 10);
+        chosenElement.elm = target as HTMLElement;
+        document.addEventListener( 'mousemove', onMouseMove );
+        document.addEventListener( 'mouseup', onMouseUp );
+      }
+      vm.debugReset();
+      vm.debugInit();
+    }
+
+    function onMouseMove(e: MouseEvent) {
+      if ( initialCoord.x && initialCoord.y && chosenElement.elm && chosenElement.x && chosenElement.y ) {
+        vm.debugFlag();
+        vm.debugInit();
+        const updateX = e.pageX - initialCoord.x;
+        const updateY = e.pageY - initialCoord.y;
+        chosenElement.elm.style.left = chosenElement.x + updateX + 'px';
+        chosenElement.elm.style.top = chosenElement.y + updateY + 'px';
+      }
+    }
+
+    function onMouseUp() {
+      initialCoord.x = undefined;
+      initialCoord.y = undefined;
+      chosenElement.x = undefined;
+      chosenElement.y = undefined;
+      chosenElement.elm = undefined;
+      document.removeEventListener( 'mousemove', onMouseMove );
+      document.removeEventListener( 'mouseup', onMouseUp );
+    }
+  }
+
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .block {
   width: 800px;
   height: 500px;
@@ -179,6 +298,7 @@ export default class DragDropElement extends Vue {
 
   .element {
     position: absolute;
+    border: 1px solid grey;
 
     img {
       width: 150px;
