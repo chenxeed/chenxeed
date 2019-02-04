@@ -3,6 +3,7 @@ import Vuex, { StoreOptions } from 'vuex';
 
 Vue.use(Vuex);
 
+// get the icon list on https://materialdesignicons.com/
 const store: StoreOptions<TGlobalStore.IState> = {
   state: {
     labsLists : [
@@ -14,7 +15,12 @@ const store: StoreOptions<TGlobalStore.IState> = {
       {
         title : 'Nested Components',
         link : `/labs/nested-component`,
-        icon : 'xbox-controller'
+        icon : 'folder-multiple'
+      },
+      {
+        title : 'Transparent Wrapper',
+        link : `/labs/transparent-wrapper-component`,
+        icon : 'folder-multiple-outline'
       },
       {
         title : 'TUI Image Editor',

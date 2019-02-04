@@ -32,6 +32,11 @@ export default new Router({
           component: () => import('./views/Labs/NestedComponent/index.vue')
         },
         {
+          path: 'transparent-wrapper-component',
+          name: 'transparent-wrapper-component',
+          component: () => import('./views/Labs/TransparentWrapperComponent/index.vue')
+        },
+        {
           path: 'tui-image-editor',
           name: 'tui-image-editor',
           component: () => import('./views/Labs/TuiImageEditor/index.vue')
