@@ -1,5 +1,5 @@
 <template>
-  <div>{{ content }}</div>
+  <div><img :src="src" /></div>
 </template>
 <script>
 //
@@ -7,15 +7,15 @@
 //
 
 export default {
-  name: 'ListText',
+  name: 'ListImage',
   props: {
     item: {
       default: {}
     }
   },
   computed: {
-    content() {
-      return this.item.content;
+    src() {
+      return this.item.src;
     }
   }
 };

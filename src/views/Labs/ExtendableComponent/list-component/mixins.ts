@@ -1,11 +1,12 @@
 import textMixin from './text/mixin';
+import imageMixin from './image/mixin';
 
 const baseMixin = {
   data: () => {
     return {
-      addComponents: ['addText']
+      addComponents: ['addText', 'addImage']
     };
   }
 };
 
-export default [baseMixin, textMixin];
+export default [baseMixin, textMixin, imageMixin];

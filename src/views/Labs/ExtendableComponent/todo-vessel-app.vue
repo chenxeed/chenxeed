@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div>
+  <div class="columns">
+    <div class="column">
       <div class="title is-1">Add New List</div>
       <template v-if="addComponents">
         <div
@@ -13,8 +13,10 @@
         </div>
       </template>
     </div>
-    <div>
-      <ul>
+    <div class="column">
+      <div class="title is-1">Lists</div>
+      <div v-if="!lists.length">List are empty!</div>
+      <ul v-if="lists.length">
         <li
           v-for="list in lists"
           :key="list.id">
@@ -29,6 +31,40 @@
   </div>
 </template>
 <script>
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 import ListComponent from './list-component/components';
 import MixinList from './list-component/mixins';
 
@@ -45,15 +81,19 @@ export default {
   },
   methods: {
     addList(list) {
-      this.lists.push({
+      const newList = {
         ...list,
         id: `${Math.round(Math.random() * 10000000)}`
-      });
+      };
+      this.lists.push(newList);
+      this.$emit('list-added', newList);
     },
     removeList(id) {
-      this.lists = this.lists.filter((list) => {
-        return list.id !== id;
+      const removedList = this.lists.find((list) => {
+        return list.id === id;
       });
+      this.lists.splice(this.lists.indexOf(removedList), 1);
+      this.$emit('list-removed', removedList);
     }
   }
 };

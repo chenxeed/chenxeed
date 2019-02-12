@@ -5,6 +5,8 @@
         <p>Showcase on creating a component that have extendable interface
         by making use of the mixins.</p>
       </div>
+    </div>
+    <div class="columns">
       <div class="column">
         <todo-vessel-app />
       </div>
