@@ -31,6 +31,11 @@ const store: StoreOptions<TGlobalStore.IState> = {
         title : 'Drag Drop Element',
         link : `/labs/drag-drop-element`,
         icon : 'arrow-all'
+      },
+      {
+        title : 'Extendable Component',
+        link : `/labs/extendable-component`,
+        icon : 'arrow-all'
       }
     ]
   },

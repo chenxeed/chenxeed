@@ -45,6 +45,11 @@ export default new Router({
           path: 'drag-drop-element',
           name: 'drag-drop-element',
           component: () => import('./views/Labs/DragDropElement/index.vue')
+        },
+        {
+          path: 'extendable-component',
+          name: 'extendable-component',
+          component: () => import('./views/Labs/ExtendableComponent/index.vue')
         }
       ]
     },
