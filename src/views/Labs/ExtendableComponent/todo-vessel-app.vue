@@ -16,55 +16,29 @@
     <div class="column">
       <div class="title is-1">Lists</div>
       <div v-if="!lists.length">List are empty!</div>
-      <ul v-if="lists.length">
-        <li
+      <div
+        class="box"
+        v-if="lists.length">
+        <div class="media"
           v-for="list in lists"
           :key="list.id">
-          <div class="box">
+          <div class="media-left">
             <div class="tag is-light">Component: {{ list.type }}</div>
-            <button class="delete" @click="removeList(list.id)"></button>
+          </div>
+          <div class="media-content">
             <component :is="list.type" :item="list" />
           </div>
-        </li>
-      </ul>
+          <div class="media-right">
+            <button
+              class="delete"
+              @click="removeList(list.id)"></button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 <script>
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
 import ListComponent from './list-component/components';
 import MixinList from './list-component/mixins';
 

@@ -1,8 +1,22 @@
 <template>
   <div>
-    <div>Add Image</div>
-    <div><input type="text" v-model="newImage"/></div>
-    <div><button @click="submit">Add</button></div>
+    <div class="field">
+      <label class="label">Add Image</label>
+      <div class="control">
+        <input
+          class="input"
+          type="text"
+          placeholder="Insert your image URL here"
+          v-model="newImage"/>
+      </div>
+    </div>
+    <div class="field">
+      <div class="control">
+        <button
+          class="button is-primary"
+          @click="submit">Add</button>
+      </div>
+    </div>
   </div>
 </template>
 <script>
