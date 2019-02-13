@@ -35,7 +35,7 @@
           <div class="media-right">
             <button
               class="delete"
-              @click="removeList(list.id)"></button>
+              @click="removeList(list.id, true)"></button>
           </div>
         </div>
       </div>
@@ -43,8 +43,8 @@
   </div>
 </template>
 <script>
-import ListComponent from './list-component/components';
-import MixinList from './list-component/mixins';
+import ListComponent from './extensions/components';
+import MixinList from './extensions/mixins';
 
 export default {
   name: 'TodoVesselApp',
@@ -59,32 +59,40 @@ export default {
   },
   methods: {
     // public methods to be accessible by the list mixins
-    addList(list) {
+    addList(list, transactional = false) {
       const newList = {
         ...list,
-        id: `${Math.round(Math.random() * 10000000)}`
+        id: list.id || `${Math.round(Math.random() * 10000000)}`
       };
       this.lists.push(newList);
-      this.$emit('list-added', newList);
+      this.$emit('list-added', {
+        newList,
+        transactional
+      });
     },
-    modifyList(id, update) {
+    modifyList(id, update, transactional = false) {
       const modifiedList = this.lists.find((list) => {
         return list.id === id;
       });
       const beforeModified = JSON.parse(JSON.stringify(modifiedList));
       Object.assign(modifiedList, update);
+      const afterModified = JSON.parse(JSON.stringify(modifiedList));
       this.$emit('list-modified', {
         before: beforeModified,
-        after: modifiedList,
-        change: update
+        after: afterModified,
+        change: update,
+        transactional
       });
     },
-    removeList(id) {
+    removeList(id, transactional = false) {
       const removedList = this.lists.find((list) => {
         return list.id === id;
       });
       this.lists.splice(this.lists.indexOf(removedList), 1);
-      this.$emit('list-removed', removedList);
+      this.$emit('list-removed', {
+        removedList,
+        transactional
+      });
     },
     // event listeners
     onDoubleClickList(list) {

@@ -8,10 +8,11 @@ export default Vue.extend({
       // todo-vessel-app component
       // This can be typed more properly if the todo-vessel-app
       // component are written as vue class component.
-      (this as any).addList({
+      const newList = {
         type: 'ListText',
         content: newText
-      });
+      };
+      (this as any).addList(newList, true);
     });
 
     this.$on('update-text', ({id, text}: {id: string, text: string}) => {
@@ -23,7 +24,7 @@ export default Vue.extend({
       const update = {
         content: text
       };
-      (this as any).modifyList(id, update);
+      (this as any).modifyList(id, update, true);
     });
 
     this.$on('list-dblclicked', (list: any) => {

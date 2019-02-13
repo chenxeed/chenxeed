@@ -9,10 +9,11 @@ export default Vue.extend({
       // todo-vessel-app component
       // This can be typed more properly if the todo-vessel-app
       // component are written as vue class component.
-      (this as any).addList({
+      const newList = {
         type: 'ListImage',
         src: newImage
-      });
+      };
+      (this as any).addList(newList, true);
     });
 
     this.$on('update-image', ({id, imageUrl}: {id: string, imageUrl: string}) => {
@@ -24,7 +25,7 @@ export default Vue.extend({
       const update = {
         src: imageUrl
       };
-      (this as any).modifyList(id, update);
+      (this as any).modifyList(id, update, true);
     });
 
     // mount the modal editor component to be used later

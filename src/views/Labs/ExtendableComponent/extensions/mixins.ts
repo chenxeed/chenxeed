@@ -1,5 +1,6 @@
 import textMixin from './text/mixin';
 import imageMixin from './image/mixin';
+import historyMixin from './history/mixin';
 
 const baseMixin = {
   data: () => {
@@ -9,4 +10,4 @@ const baseMixin = {
   }
 };
 
-export default [baseMixin, textMixin, imageMixin];
+export default [baseMixin, textMixin, imageMixin, historyMixin];
