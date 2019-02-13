@@ -12,7 +12,7 @@ export default Vue.extend({
         type: 'ListText',
         content: newText
       };
-      (this as any).addList(newList, true);
+      (this as any).addList(newList, null, true);
     });
 
     this.$on('update-text', ({id, text}: {id: string, text: string}) => {

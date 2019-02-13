@@ -9,10 +9,11 @@ export default Vue.extend({
   },
   created() {
     this.$on('list-added', (params: any) => {
-      const {newList, transactional} = params;
+      const {newList, index, transactional} = params;
       if (transactional) {
         this.record('list-added', {
-          newList
+          newList,
+          index
         });
       }
     });
@@ -23,10 +24,11 @@ export default Vue.extend({
       }
     });
     this.$on('list-removed', (params: any) => {
-      const {removedList, transactional} = params;
+      const {removedList, index, transactional} = params;
       if (transactional) {
         this.record('list-removed', {
-          removedList
+          removedList,
+          index
         });
       }
     });
@@ -87,7 +89,8 @@ export default Vue.extend({
           }
           case 'list-removed': {
             const list = history.params.removedList;
-            (this as any).addList(list);
+            const index = history.params.index;
+            (this as any).addList(list, index);
           }
         }
         this.historyIndex--;
@@ -99,7 +102,8 @@ export default Vue.extend({
         switch (history.action) {
           case 'list-added': {
             const list = history.params.newList;
-            (this as any).addList(list);
+            const index = history.params.index;
+            (this as any).addList(list, index);
             break;
           }
           case 'list-modified': {

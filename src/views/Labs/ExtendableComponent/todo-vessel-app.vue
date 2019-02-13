@@ -59,14 +59,19 @@ export default {
   },
   methods: {
     // public methods to be accessible by the list mixins
-    addList(list, transactional = false) {
+    addList(list, index = null, transactional = false) {
       const newList = {
         ...list,
         id: list.id || `${Math.round(Math.random() * 10000000)}`
       };
-      this.lists.push(newList);
+      if (index === null) {
+        this.lists.push(newList);
+      } else {
+        this.lists.splice(index, 0, newList);
+      }
       this.$emit('list-added', {
         newList,
+        index,
         transactional
       });
     },
@@ -88,9 +93,11 @@ export default {
       const removedList = this.lists.find((list) => {
         return list.id === id;
       });
-      this.lists.splice(this.lists.indexOf(removedList), 1);
+      const index = this.lists.indexOf(removedList);
+      this.lists.splice(index, 1);
       this.$emit('list-removed', {
         removedList,
+        index,
         transactional
       });
     },

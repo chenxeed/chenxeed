@@ -13,7 +13,7 @@ export default Vue.extend({
         type: 'ListImage',
         src: newImage
       };
-      (this as any).addList(newList, true);
+      (this as any).addList(newList, null, true);
     });
 
     this.$on('update-image', ({id, imageUrl}: {id: string, imageUrl: string}) => {
