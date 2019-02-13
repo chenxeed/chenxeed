@@ -1,11 +1,11 @@
-import AddText from './text/add.vue';
+import EditorText from './text/editor.vue';
 import ListText from './text/index.vue';
-import AddImage from './image/add.vue';
+import EditorImage from './image/editor.vue';
 import ListImage from './image/index.vue';
 
 export default {
-  AddText,
+  EditorText,
   ListText,
-  AddImage,
+  EditorImage,
   ListImage
 };

@@ -20,16 +20,8 @@
   </div>
 </template>
 <script>
-//
-//
-//
-//
-//
-//
-//
-
 export default {
-  name: 'AddImage',
+  name: 'EditorImage',
   data: () => {
     return {
       newImage: ''

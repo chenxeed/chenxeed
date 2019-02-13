@@ -2,10 +2,6 @@
   <div>{{ content }}</div>
 </template>
 <script>
-//
-//
-//
-
 export default {
   name: 'ListText',
   props: {

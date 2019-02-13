@@ -8,8 +8,8 @@
           :key="component"
           class="box">
           <component
-            :is="component"
-            v-on="$listeners"/>
+            :ref="component"
+            :is="component"/>
         </div>
       </template>
     </div>
@@ -26,7 +26,11 @@
             <div class="tag is-light">Component: {{ list.type }}</div>
           </div>
           <div class="media-content">
-            <component :is="list.type" :item="list" />
+            <component
+              :ref="list.type"
+              :is="list.type"
+              :item="list"
+              @dblclick.native="onDoubleClickList(list)" />
           </div>
           <div class="media-right">
             <button
@@ -54,6 +58,7 @@ export default {
     };
   },
   methods: {
+    // public methods to be accessible by the list mixins
     addList(list) {
       const newList = {
         ...list,
@@ -62,12 +67,28 @@ export default {
       this.lists.push(newList);
       this.$emit('list-added', newList);
     },
+    modifyList(id, update) {
+      const modifiedList = this.lists.find((list) => {
+        return list.id === id;
+      });
+      const beforeModified = JSON.parse(JSON.stringify(modifiedList));
+      Object.assign(modifiedList, update);
+      this.$emit('list-modified', {
+        before: beforeModified,
+        after: modifiedList,
+        change: update
+      });
+    },
     removeList(id) {
       const removedList = this.lists.find((list) => {
         return list.id === id;
       });
       this.lists.splice(this.lists.indexOf(removedList), 1);
       this.$emit('list-removed', removedList);
+    },
+    // event listeners
+    onDoubleClickList(list) {
+      this.$emit('list-dblclicked', list);
     }
   }
 };

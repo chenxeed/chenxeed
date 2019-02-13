@@ -4,7 +4,7 @@ import imageMixin from './image/mixin';
 const baseMixin = {
   data: () => {
     return {
-      addComponents: ['addText', 'addImage']
+      addComponents: ['EditorText', 'EditorImage']
     };
   }
 };
