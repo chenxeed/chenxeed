@@ -1,8 +1,8 @@
 import Vue from 'vue';
 
 export default Vue.extend({
-  created() {
-    this.$on('add-text', (newText: string) => {
+  mounted() {
+    (this.$refs.EditorText as Vue[])[0].$on('add-text', (newText: string) => {
       // addList are methods that comes from todo-vessel-app,
       // and it's accessed here as this mixin is added into
       // todo-vessel-app component
@@ -15,7 +15,7 @@ export default Vue.extend({
       (this as any).addList(newList, null, true);
     });
 
-    this.$on('update-text', ({id, text}: {id: string, text: string}) => {
+    (this.$refs.EditorText as Vue[])[0].$on('update-text', ({id, text}: {id: string, text: string}) => {
       // modifyList are methods that comes from todo-vessel-app,
       // and it's accessed here as this mixin is added into
       // todo-vessel-app component

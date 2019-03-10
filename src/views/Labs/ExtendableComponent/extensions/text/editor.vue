@@ -54,12 +54,12 @@ export default {
   methods: {
     submit() {
       if (this.id) {
-        this.$parent.$emit('update-text', {
+        this.$emit('update-text', {
           id: this.id,
           text: this.newText
         });
       } else {
-        this.$parent.$emit('add-text', this.newText);
+        this.$emit('add-text', this.newText);
       }
       this.id = '';
       this.newText = '';

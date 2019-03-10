@@ -4,10 +4,33 @@ export default Vue.extend({
   data: () => {
     return {
       historyList: [],
-      historyIndex: -1
+      historyIndex: -1,
     };
   },
-  created() {
+  computed: {
+    disableUndo(): boolean {
+      if (this.historyList.length === 0) {
+        return true;
+      } else {
+        return this.historyIndex >= 0;
+      }
+    },
+    disableRedo(): boolean {
+      if (this.historyList.length === 0) {
+        return true;
+      } else {
+        return this.historyIndex < this.historyList.length - 1;
+      }
+    }
+  },
+  mounted() {
+    (this.$refs.ToolHistory as Vue[])[0].$on('undo', () => {
+      this.undo();
+    });
+    (this.$refs.ToolHistory as Vue[])[0].$on('redo', () => {
+      this.redo();
+    });
+
     this.$on('list-added', (params: any) => {
       const {newList, index, transactional} = params;
       if (transactional) {

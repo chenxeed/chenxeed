@@ -5,7 +5,8 @@ import historyMixin from './history/mixin';
 const baseMixin = {
   data: () => {
     return {
-      addComponents: ['EditorText', 'EditorImage']
+      addComponents: ['EditorImage', 'EditorText'],
+      toolComponents: ['ToolHistory']
     };
   }
 };

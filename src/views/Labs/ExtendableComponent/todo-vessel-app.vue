@@ -1,7 +1,7 @@
 <template>
   <div class="columns">
-    <div class="column">
-      <div class="title is-1">Add New List</div>
+    <div class="column notification is-secondary">
+      <div class="title is-1">Sidebar</div>
       <template v-if="addComponents">
         <div
           v-for="component in addComponents"
@@ -13,7 +13,15 @@
         </div>
       </template>
     </div>
-    <div class="column">
+    <div class="column notification is-black">
+      <div class="title is-5">Tools</div>
+      <div class="box">
+        <component
+          v-for="component in toolComponents"
+          :key="component"
+          :ref="component"
+          :is="component"/>
+      </div>
       <div class="title is-1">Lists</div>
       <div v-if="!lists.length">List are empty!</div>
       <div

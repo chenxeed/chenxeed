@@ -29,7 +29,7 @@ export default {
   },
   methods: {
     submit() {
-      this.$parent.$emit('add-image', this.newImage);
+      this.$emit('add-image', this.newImage);
       this.newImage = '';
     }
   }
