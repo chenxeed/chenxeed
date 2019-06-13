@@ -5,13 +5,9 @@
     />
 </template>
 <script>
-//
-//
-//
-
 import ComponentMain from './component-main.vue';
 export default {
-  name : 'ButtonTransparent',
+  name : 'ComponentTransparent',
   components : {
     ComponentMain
   }
