@@ -10,22 +10,6 @@
   </div>
 </template>
 <script>
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-//
-//
-//
-
 export default {
   name : 'comp-button',
   props : {
