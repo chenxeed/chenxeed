@@ -69,6 +69,18 @@
                 <span>Facebook</span>
               </a>
             </p>
+            <p class="control">
+              <a class="button"
+                target="_blank"
+                href="https://brave.com/che096">
+                <span class="icon">
+                  <img src="https://img.icons8.com/wired/64/000000/brave-web-browser.png">
+                </span>
+                <span>
+                  Brave
+                </span>
+              </a>
+            </p>
           </div>
         </div>
       </div>
