@@ -34,10 +34,13 @@
   </div>
 </template>
 <script lang="ts">
-import * as ImageEditor from 'tui-image-editor';
 import * as testImage from './test.jpg';
 import blackTheme from './black-theme';
 import { Component, Watch, Vue } from 'vue-property-decorator';
+
+// tslint:disable-next-line
+const ImageEditor = require('tui-image-editor');
+
 
 @Component({})
 
