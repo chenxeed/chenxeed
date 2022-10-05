@@ -17,12 +17,13 @@
         </router-link>
       </div>
       <div class="column">
-        <menu-box icon="library-books">
-          <div slot="label">
-            Blog <br/>
-            <span class="is-size-6">Coming soon..</span>
-            </div>
-        </menu-box>
+        <a href="https://dev.to/chenxeed" target="_blank">
+          <menu-box icon="library-books">
+            <div slot="label">
+              Blog
+              </div>
+          </menu-box>
+        </a>
       </div>
       <div class="column">
         <router-link to="/about">
@@ -34,7 +35,7 @@
     </div>
 
 
-    
+
   </div>
 </template>
 
